@@ -4,15 +4,24 @@
  * @param {*} searchUrl must build from buildSyllabusUrl
  * @returns the link to the first syllabus that was found (if not found, null)
  */
-async function getSyllabusLink(searchUrl) {
-  const response = await fetch(searchUrl);
-  const html = await response.text();
+function fetchSyllabus(url) {
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({ type: "FETCH_SYLLABUS", url }, (response) => {
+      if (response?.error) {
+        return reject(response.error);
+      }
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  const linkElement = doc.getElementById("CPH1_gvw_kensaku_lnkShousai_0");
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(response.html, "text/html");
+      const linkElement = doc.getElementById("CPH1_gvw_kensaku_lnkShousai_0");
 
-  return linkElement ? `https://syllabus.aoyama.ac.jp/${linkElement.getAttribute("href")}` : null;
+      if (!linkElement) {
+        return resolve(null);
+      }
+
+      resolve(`https://syllabus.aoyama.ac.jp/${linkElement.getAttribute("href")}`);
+    });
+  });
 }
 
-export default getSyllabusLink;
+export default fetchSyllabus;

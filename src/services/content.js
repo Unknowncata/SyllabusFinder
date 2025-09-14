@@ -1,22 +1,7 @@
 import buildSyllabusUrl from "./buildSyllabusUrl.js";
+import fetchSyllabus from "./syllabusFinder.js";
 
 const MAJOR = "情報テクノロジー学科";
-
-function parseSyllabus(html) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  const linkElement = doc.getElementById("CPH1_gvw_kensaku_lnkShousai_0");
-  return linkElement ? `https://syllabus.aoyama.ac.jp/${linkElement.getAttribute("href")}` : null;
-}
-
-function fetchSyllabus(url) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: "FETCH_SYLLABUS", url }, (response) => {
-      if (response?.error) reject(response.error);
-      else resolve(parseSyllabus(response.html));
-    });
-  });
-}
 
 function createButton() {
   const button = document.createElement("button");
@@ -34,28 +19,43 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
   e.preventDefault();
 
   const periodTermText = courseCard.querySelector(".courseCardInfo")?.textContent.trim() || "";
-  const [period, term] = periodTermText.split(/\s+/); // First part is period, next is term
+  const [period, term] = periodTermText.split(/\s+/);
 
   const lectureName = courseCard.querySelector(".courseCardName")?.textContent.trim() || "";
-  //   const lecturer = courseCard.querySelector(".courseCardUser")?.textContent.trim() || "";
-  const lecturer = "";
+  const lecturerRaw = courseCard.querySelector(".courseCardUser");
+  const lecturer = [...lecturerRaw.childNodes][0].textContent || "";
 
   const data = {
     lectureName,
-    lecturer,
+    lecturer: lecturer.replace(/["ほか"]/g, "").trim(),
     day: dayLabel,
     period: period || "",
     major: MAJOR,
     term: term || "",
   };
 
-  const syllabusSearchURL = buildSyllabusUrl(data);
+  let syllabusSearchURL = buildSyllabusUrl(data);
 
   try {
     const link = await fetchSyllabus(syllabusSearchURL);
-    window.location.href = link;
-  } catch (e) {
-    console.log(`ERROR: ${e}`);
+    if (link) {
+      window.location.href = link;
+      return;
+    }
+
+    const retryData = { ...data, lecturer: "" };
+    syllabusSearchURL = buildSyllabusUrl(retryData);
+
+    const retryLink = await fetchSyllabus(syllabusSearchURL);
+    if (retryLink) {
+      window.location.href = retryLink;
+      return;
+    }
+
+    // If still not found
+    alert("No syllabus found :(");
+  } catch (err) {
+    alert("Error fetching syllabus:", err);
   }
 }
 

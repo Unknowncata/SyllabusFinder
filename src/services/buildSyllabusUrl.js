@@ -28,7 +28,9 @@ function buildSyllabusUrl({ lectureName, lecturer, day, period, major, term, inP
   }
 
   if (period) {
-    params.set(`JG${period}`, "on");
+    const fullWidthPeriod = period[0];
+    const periodNumber = String.fromCharCode(fullWidthPeriod.charCodeAt(0) - 0xff10 + 0x30);
+    params.set(`JG${periodNumber}`, "on");
   }
 
   if (major && major.length) {
