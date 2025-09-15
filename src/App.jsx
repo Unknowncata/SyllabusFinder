@@ -1,10 +1,10 @@
 import "./index.css";
 import { faculties } from "./services/faculties";
 import FacultyElement from "./features/FacultyElement";
-import { useState } from "react";
+import useChromeStorageState from "./useChromeStorageState";
 
 function App() {
-  const [selectedMajor, setSelectedMajor] = useState("情報テクノロジー学科");
+  const [selectedMajor, setSelectedMajor] = useChromeStorageState("major", null);
 
   return (
     <div className="h-48 w-96 rounded-lg px-5 py-4">

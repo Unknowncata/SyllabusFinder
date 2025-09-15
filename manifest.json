@@ -3,7 +3,7 @@
   "name": "Syllabus Finder",
   "version": "1.0",
   "description": "Syllabus finder for Aoyama Gakuin Students",
-  "permissions": ["scripting", "activeTab", "webRequest", "webRequestBlocking"],
+  "permissions": ["storage", "scripting", "activeTab"],
   "background": {
     "service_worker": "background.js"
   },

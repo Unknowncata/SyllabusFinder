@@ -1,10 +1,10 @@
 const facultyColors = {
   text: {
-    文学部: "text-indigo-600",
+    文学部: "text-red-600",
     教育人間科学部: "text-orange-600",
     経済学部: "text-amber-600",
     法学部: "text-fuchsia-600",
-    経営学部: "text-rose-600",
+    経営学部: "text-yellow-600",
     総合文化政策学部: "text-lime-600",
     国際政治経済学部: "text-teal-600",
     理工学部: "text-green-600",
@@ -13,11 +13,11 @@ const facultyColors = {
     コミュニティ人間科学部: "text-yellow-600",
   },
   border: {
-    文学部: "border-indigo-600",
+    文学部: "border-red-600",
     教育人間科学部: "border-orange-600",
     経済学部: "border-amber-600",
     法学部: "border-fuchsia-600",
-    経営学部: "border-rose-600",
+    経営学部: "border-yellow-600",
     総合文化政策学部: "border-lime-600",
     国際政治経済学部: "border-teal-600",
     理工学部: "border-green-600",
@@ -29,6 +29,10 @@ const facultyColors = {
 
 function FacultyElement({ faculty: facultyInput, isLast, selectedMajor, setSelectedMajor }) {
   const { faculty, majors } = facultyInput;
+
+  function handleClick(major) {
+    setSelectedMajor(major);
+  }
 
   return (
     <>
@@ -43,11 +47,11 @@ function FacultyElement({ faculty: facultyInput, isLast, selectedMajor, setSelec
             return (
               <li
                 className={isSelected ? selectedStyle : baseStyle}
-                onClick={() => setSelectedMajor(major.label)}
+                onClick={() => handleClick(major.label)}
                 key={index}
               >
                 <p
-                  className={`transition-all duration-300 ${!isSelected && "hover:translate-x-1"} ${
+                  className={`transition-all duration-300 ${!isSelected && "hover:translate-x-1.5"} ${
                     isSelected && "font-semibold"
                   }`}
                 >
