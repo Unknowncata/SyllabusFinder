@@ -1,6 +1,6 @@
-import "./index.css";
-import { faculties } from "./services/faculties";
-import FacultyElement from "./features/FacultyElement";
+import "../index.css";
+import faculties from "../../public/faculties.json";
+import FacultyElement from "./FacultyElement";
 import useChromeStorageState from "./useChromeStorageState";
 
 function App() {

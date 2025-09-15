@@ -1,7 +1,5 @@
+import buildSyllabusSearchUrl from "./buildSyllabusSearchUrl.js";
 import buildSyllabusUrl from "./buildSyllabusUrl.js";
-import fetchSyllabus from "./syllabusFinder.js";
-
-const MAJOR = "情報テクノロジー学科";
 
 function createButton() {
   const button = document.createElement("button");
@@ -15,8 +13,22 @@ function createButton() {
   return button;
 }
 
+async function getMajor() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get("major", (result) => {
+      if (!result) {
+        reject("Error fetching major from local chrome storage");
+      }
+
+      resolve(result["major"]);
+    });
+  });
+}
+
 async function handleButtonClick(e, { courseCard, dayLabel }) {
   e.preventDefault();
+
+  const major = await getMajor();
 
   const periodTermText = courseCard.querySelector(".courseCardInfo")?.textContent.trim() || "";
   const [period, term] = periodTermText.split(/\s+/);
@@ -30,23 +42,24 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
     lecturer: lecturer.replace(/["ほか"]/g, "").trim(),
     day: dayLabel,
     period: period || "",
-    major: MAJOR,
+    major: major,
     term: term || "",
   };
 
-  let syllabusSearchURL = buildSyllabusUrl(data);
+  let syllabusSearchURL = await buildSyllabusSearchUrl(data);
+  console.log(syllabusSearchURL);
 
   try {
-    const link = await fetchSyllabus(syllabusSearchURL);
+    const link = await buildSyllabusUrl(syllabusSearchURL);
     if (link) {
       window.location.href = link;
       return;
     }
 
     const retryData = { ...data, lecturer: "" };
-    syllabusSearchURL = buildSyllabusUrl(retryData);
+    syllabusSearchURL = await buildSyllabusSearchUrl(retryData);
 
-    const retryLink = await fetchSyllabus(syllabusSearchURL);
+    const retryLink = await buildSyllabusUrl(syllabusSearchURL);
     if (retryLink) {
       window.location.href = retryLink;
       return;
@@ -60,7 +73,6 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
 }
 
 (function () {
-  // Goes through every week days
   document.querySelectorAll(".weeklyCourseArea .dayBox").forEach((dayBox) => {
     const dayLabel = dayBox.querySelector(".cpLabel.orange")?.textContent.trim() || "";
 
@@ -68,7 +80,6 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
       return;
     }
 
-    // Goes through every lecture from given days
     dayBox.querySelectorAll(".courseCard").forEach((courseCard) => {
       const button = createButton();
 

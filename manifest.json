@@ -19,5 +19,11 @@
       "js": ["content.js"]
     }
   ],
-  "host_permissions": ["https://syllabus.aoyama.ac.jp/*", "https://cp.aim.aoyama.ac.jp/*"]
+  "host_permissions": ["https://syllabus.aoyama.ac.jp/*", "https://cp.aim.aoyama.ac.jp/*"],
+  "web_accessible_resources": [
+    {
+      "matches": ["https://syllabus.aoyama.ac.jp/*", "https://cp.aim.aoyama.ac.jp/*"],
+      "resources": ["faculties.json"]
+    }
+  ]
 }
