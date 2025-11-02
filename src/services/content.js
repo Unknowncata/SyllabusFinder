@@ -48,7 +48,7 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
   const lecturerRaw = courseCard.querySelector(".courseCardUser");
   const lecturer = [...lecturerRaw.childNodes][0].textContent || "";
 
-  let data = {
+  let searchFilters = {
     lectureName,
     lecturer: lecturer.replace(/["ほか"]/g, "").trim(),
     day: dayLabel,
@@ -60,13 +60,13 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
 
   try {
     // First attempt: with lecturer
-    let { syllabusSearchDoc, syllabusSearchResults } = await searchSyllabus(data);
+    let { syllabusSearchDoc, syllabusSearchResults } = await searchSyllabus(searchFilters);
 
     // Retry if nothing found (remove lecturer)
     if (syllabusSearchResults.length === 0) {
       console.warn("No syllabus found with lecturer. Retrying without lecturer...");
-      data = { ...data, lecturer: "" };
-      ({ syllabusSearchDoc, syllabusSearchResults } = await searchSyllabus(data));
+      searchFilters = { ...searchFilters, lecturer: "" };
+      ({ syllabusSearchDoc, syllabusSearchResults } = await searchSyllabus(searchFilters));
     }
 
     // Still nothing found
@@ -79,7 +79,8 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
       const linkElement = syllabusSearchDoc.getElementById("CPH1_gvw_kensaku_lnkShousai_0");
       const link = `https://syllabus.aoyama.ac.jp/${linkElement.getAttribute("href")}`;
 
-      return (window.location.href = link);
+      window.location.href = link;
+      return;
     }
 
     // 2+ syllabus search results
@@ -92,12 +93,13 @@ async function handleButtonClick(e, { courseCard, dayLabel }) {
       syllabusID: searchResult.querySelector(".col8 a")?.getAttribute("href") || "",
     }));
 
-    alert("More than one syllabus found. Bringing you to the first syllabus found. Please check details.");
-    const link = `https://syllabus.aoyama.ac.jp/${syllabusResults[0].syllabusID}`;
-    window.location.href = link;
-
-    // Or if you want the popup:
-    // showSyllabusResults(syllabusResults);
+    await chrome.runtime.sendMessage({
+      type: "UPDATE_CLASSES",
+      payload: {
+        searchFilters,
+        syllabusResults,
+      },
+    });
   } catch (err) {
     alert("Error fetching syllabus. Please try again later.");
     console.error(err);

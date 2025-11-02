@@ -1,10 +1,19 @@
 chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
-  if (message.type !== "FETCH_SYLLABUS") return;
+  switch (message.type) {
+    case "FETCH_SYLLABUS": {
+      fetch(message.url)
+        .then((res) => res.text())
+        .then((html) => sendResponse({ html }))
+        .catch((err) => sendResponse({ error: err.message }));
+      return true;
+    }
 
-  fetch(message.url)
-    .then((res) => res.text())
-    .then((html) => sendResponse({ html }))
-    .catch((err) => sendResponse({ error: err.message }));
+    case "UPDATE_CLASSES": {
+      chrome.runtime.sendMessage({ type: "UPDATE_CLASSES", payload: message.payload });
+      return true;
+    }
 
-  return true;
+    default:
+      break;
+  }
 });

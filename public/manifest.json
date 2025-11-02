@@ -3,15 +3,18 @@
   "name": "Syllabus Finder",
   "version": "1.0",
   "description": "Syllabus finder for Aoyama Gakuin Students",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "permissions": ["storage", "scripting", "activeTab", "sidePanel"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "index.html",
+    "default_popup": "src/popup/index.html",
     "default_icon": {
       "128": "./icon.png"
     }
+  },
+  "side_panel": {
+    "default_path": "src/sidepanel/index.html"
   },
   "content_scripts": [
     {

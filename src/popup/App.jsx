@@ -1,7 +1,7 @@
-import "../index.css";
+import "../styles/index.css";
 import faculties from "../../public/faculties.json";
-import FacultyElement from "./FacultyElement";
-import useChromeStorageState from "./useChromeStorageState";
+import FacultyElement from "./features/FacultyElement";
+import useChromeStorageState from "./features/useChromeStorageState";
 
 function App() {
   const [selectedMajor, setSelectedMajor] = useChromeStorageState("major", null);

@@ -10,22 +10,25 @@ export default defineConfig({
     tailwindcss(),
     viteStaticCopy({
       targets: [
-        { src: "manifest.json", dest: "." }, // copy manifest to dist
+        { src: "public/manifest.json", dest: "." },
+        { src: "public/icon.png", dest: "." },
       ],
     }),
   ],
   build: {
     rollupOptions: {
       input: {
-        popup: resolve(__dirname, "index.html"), // popup React page
-        background: resolve(__dirname, "src/services/background.js"), // background service worker
-        content: resolve(__dirname, "src/services/content.js"), // content script
+        popup: resolve(__dirname, "src/popup/index.html"),
+        sidepanel: resolve(__dirname, "src/sidepanel/index.html"),
+        background: resolve(__dirname, "src/services/background.js"),
+        content: resolve(__dirname, "src/services/content.js"),
       },
       output: {
         entryFileNames: (chunk) => {
           if (chunk.name === "content") return "content.js";
           if (chunk.name === "background") return "background.js";
-          return "assets/[name].js"; // everything else (React)
+          if (chunk.name === "popup") return "assets/popup.js";
+          return "assets/[name].js";
         },
       },
     },
