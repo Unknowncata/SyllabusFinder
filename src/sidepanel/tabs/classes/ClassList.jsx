@@ -1,6 +1,6 @@
 import ClassItem from "./ClassItem";
 
-function ClassList({ classes }) {
+function ClassList({ classes, setClasses }) {
   return (
     <ul>
       {Object.entries(classes).map(([dayLabel, classData], i) => (
@@ -8,7 +8,7 @@ function ClassList({ classes }) {
           <h4>{dayLabel}</h4>
           <ul>
             {classData.map((classItem, j) => (
-              <ClassItem key={j} classData={classItem} />
+              <ClassItem key={j} classData={classItem} setClasses={setClasses} />
             ))}
           </ul>
         </li>

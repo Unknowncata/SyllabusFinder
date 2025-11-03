@@ -2,16 +2,16 @@ import useChromeStorageState from "../majors/useChromeStorageState.jsx";
 import ClassList from "./ClassList.jsx";
 
 function Classes() {
-  const [classes, _] = useChromeStorageState("classes", []);
+  const [classes, setClasses] = useChromeStorageState("classes", {});
 
-  if (classes.length === 0) {
+  if (!classes || Object.keys(classes).length === 0) {
     return <h1>CoursePowerにアクセスしてください</h1>;
   }
 
   return (
     <div>
       <h1>あなたの授業</h1>
-      <ClassList classes={classes} />
+      <ClassList classes={classes} setClasses={setClasses} />
     </div>
   );
 }

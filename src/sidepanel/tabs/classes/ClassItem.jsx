@@ -1,8 +1,13 @@
 import searchSyllabus from "../../services/searchSyllabus";
-import useChromeStorageState from "../majors/useChromeStorageState";
 
-async function handleButtonClick(e, { classData, classes, setClasses }) {
+async function handleButtonClick(e, { classData, setClasses }) {
   e.preventDefault();
+
+  if (classData.link) {
+    window.open(classData.link, "_blank", "noopener,noreferrer");
+    alert("link already found");
+    return;
+  }
 
   try {
     // First attempt: with lecturer
@@ -26,28 +31,15 @@ async function handleButtonClick(e, { classData, classes, setClasses }) {
       const linkElement = syllabusSearchDoc.getElementById("CPH1_gvw_kensaku_lnkShousai_0");
       const link = `https://syllabus.aoyama.ac.jp/${linkElement.getAttribute("href")}`;
 
+      const day = classData.day;
+
       setClasses((prevClasses) => {
-        const day = classData.day;
-
-        if (!prevClasses[day]) {
-          return prevClasses;
-        }
-
-        const updatedDay = prevClasses[day].map((classItem) => {
-          if (classItem.lectureName === classData.lectureName && classItem.period === classData.period) {
-            alert("found");
-            return { ...classItem, link: link };
-          }
-          return classItem;
-        });
-
-        return {
-          ...prevClasses,
-          [day]: updatedDay,
-        };
+        const updatedDayClasses = prevClasses[day].map((item) =>
+          item.lectureName === classData.lectureName && item.lecturer === classData.lecturer ? { ...item, link } : item
+        );
+        return { ...prevClasses, [day]: updatedDayClasses };
       });
-
-      //   window.open(link, "_blank", "noopener,noreferrer");
+      window.open(link, "_blank", "noopener,noreferrer");
       return;
     }
 
@@ -76,14 +68,13 @@ async function handleButtonClick(e, { classData, classes, setClasses }) {
   }
 }
 
-function ClassItem({ classData }) {
+function ClassItem({ classData, setClasses }) {
   const { lectureName, lecturer, period, term, isOnline } = classData;
-  const [classes, setClasses] = useChromeStorageState("classes", {});
 
   return (
     <div
       className="bg-white shadow-md rounded-lg p-4 border border-gray-200 hover:cursor-pointer"
-      onClick={(e) => handleButtonClick(e, { classData, classes, setClasses })}
+      onClick={(e) => handleButtonClick(e, { classData, setClasses })}
     >
       <h2 className="text-lg font-semibold text-gray-800 mb-2">{lectureName}</h2>
       <div className="text-sm text-gray-600 space-y-1">
