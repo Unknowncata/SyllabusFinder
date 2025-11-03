@@ -7,7 +7,7 @@ function App() {
   const [activeTab, setActiveTab] = useState("classes");
 
   return (
-    <div className="w-[380px] h-screen bg-white flex flex-col">
+    <div className="h-screen bg-white flex flex-col">
       <div className="flex border-b border-gray-300">
         <button
           onClick={() => setActiveTab("classes")}

@@ -6,7 +6,7 @@ function Majors() {
   const [selectedMajor, setSelectedMajor] = useChromeStorageState("major", null);
 
   return (
-    <div className="h-48 w-96 rounded-lg px-5 py-4">
+    <div className="h-48 rounded-lg px-5 py-4">
       <div className="mb-3">
         <h1 className="text-2xl">Syllabus Finder</h1>
         <p className="text-base">

@@ -19,6 +19,7 @@ when the user clicks one of the classes {
 	}
 }
 
+
 sort the classes by day
 
 design {
@@ -27,6 +28,8 @@ design {
 }
 
 *********** Maybes ***********
+prob fix the prop drillings
+
 Sorting the classes by normal / based on today's day
 
 just show our custom design of the syllabus
