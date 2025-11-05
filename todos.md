@@ -24,7 +24,7 @@ sort the classes by day
 
 design {
 	make each classes information more readable
-	figure out the fixed width problem
+	add loading screen
 }
 
 *********** Maybes ***********

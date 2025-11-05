@@ -1,14 +1,16 @@
 import buildSyllabusSearchUrl from "./buildSyllabusSearchUrl";
 import fetchSyllabusSearchDoc from "./fetchSyllabusSearchDoc";
 
-async function searchSyllabus(searchData) {
-  const syllabusSearchURL = await buildSyllabusSearchUrl(searchData);
+async function searchSyllabus({ classInfo, major }) {
+  console.log(classInfo);
+  console.log(major);
+  const syllabusSearchURL = await buildSyllabusSearchUrl({ ...classInfo, major });
   console.log("Searching:", syllabusSearchURL);
 
   const syllabusSearchDoc = await fetchSyllabusSearchDoc(syllabusSearchURL);
   const syllabusSearchResults = [...syllabusSearchDoc.querySelectorAll("#CPH1_gvw_kensaku tbody tr")];
 
-  return { syllabusSearchDoc, syllabusSearchResults };
+  return syllabusSearchResults;
 }
 
 export default searchSyllabus;

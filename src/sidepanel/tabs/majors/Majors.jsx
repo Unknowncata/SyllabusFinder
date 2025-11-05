@@ -1,9 +1,17 @@
+import { useState } from "react";
 import faculties from "../../../../public/faculties.json";
+import scrapeAllClasses from "../../services/scrapeAllClasses";
 import FacultyElement from "./FacultyElement";
-import useChromeStorageState from "./useChromeStorageState";
+
+async function submitButton(selectedMajor) {
+  await chrome.storage.local.set({ selectedMajor });
+  const classes = await scrapeAllClasses(selectedMajor);
+  await chrome.storage.local.set({ classes });
+  console.log("everything seems good to go");
+}
 
 function Majors() {
-  const [selectedMajor, setSelectedMajor] = useChromeStorageState("major", null);
+  const [selectedMajor, setSelectedMajor] = useState("major", null);
 
   return (
     <div className="h-48 rounded-lg px-5 py-4">
@@ -25,6 +33,7 @@ function Majors() {
           />
         ))}
       </ul>
+      {selectedMajor && <button onClick={() => submitButton(selectedMajor)}>{selectedMajor}に決定する</button>}
     </div>
   );
 }
