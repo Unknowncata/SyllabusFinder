@@ -5,8 +5,10 @@ import FacultyElement from "./FacultyElement";
 
 async function submitButton(selectedMajor) {
   await chrome.storage.local.set({ selectedMajor });
+
   const classes = await scrapeAllClasses(selectedMajor);
   await chrome.storage.local.set({ classes });
+
   console.log("everything seems good to go");
 }
 

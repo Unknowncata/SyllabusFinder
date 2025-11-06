@@ -24,36 +24,25 @@ async function scrapeAllClasses(major) {
           syllabusSearchResults = await searchSyllabus({ classInfo, major });
         }
 
-        // 0 hit
-        if (syllabusSearchResults.length === 0) {
-          console.log("No results for:", classInfo.lectureName);
-          classes[dayLabel].push({ ...classInfo, syllabusID: null });
-          continue;
-        }
+        const syllabusList = syllabusSearchResults.length
+          ? syllabusSearchResults.map((searchResult, index) => {
+              const subject = searchResult.querySelector(".col7")?.textContent.trim() || "";
+              const syllabusID = searchResult.querySelector(".col8 a")?.getAttribute("href") || "";
+              const campus =
+                searchResult
+                  .querySelector(`#CPH1_gvw_kensaku_lblJigen_${index} span`)
+                  ?.textContent.replace(/[[\]]/g, "")
+                  .trim() || "";
+              const grade = searchResult.querySelector(".col9")?.textContent.trim() || "";
+              const credits = searchResult.querySelector(".col6")?.textContent.trim() || "";
+              const additionalInfo = searchResult.querySelector(".col10")?.textContent.trim() || "";
+              return { subject, syllabusID, campus, grade, credits, additionalInfo };
+            })
+          : [{ syllabusID: null }];
 
-        // 1+ hit(s)
-        console.log("Results found for:", classInfo.lectureName);
-        syllabusSearchResults.forEach((searchResult, index) => {
-          const campus =
-            searchResult
-              .querySelector(`#CPH1_gvw_kensaku_lblJigen_${index} span`)
-              ?.textContent.replace(/[[\]]/g, "")
-              .trim() || "";
-          const subject = searchResult.querySelector(".col3")?.textContent.trim() || "";
-          const syllabusID = searchResult.querySelector(".col8 a")?.getAttribute("href") || "";
-          const grade = searchResult.querySelector(".col9")?.textContent.trim() || "";
-          const credits = searchResult.querySelector(".col6")?.textContent.trim() || "";
-          const additionalInfo = searchResult.querySelector(".col10")?.textContent.trim() || "";
-
-          classes[dayLabel].push({
-            ...classInfo,
-            subject,
-            syllabusID,
-            campus,
-            grade,
-            credits,
-            additionalInfo,
-          });
+        classes[dayLabel].push({
+          classInfo,
+          syllabuses: syllabusList,
         });
       } catch (err) {
         console.error(err);

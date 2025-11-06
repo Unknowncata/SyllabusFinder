@@ -2,8 +2,6 @@ import buildSyllabusSearchUrl from "./buildSyllabusSearchUrl";
 import fetchSyllabusSearchDoc from "./fetchSyllabusSearchDoc";
 
 async function searchSyllabus({ classInfo, major }) {
-  console.log(classInfo);
-  console.log(major);
   const syllabusSearchURL = await buildSyllabusSearchUrl({ ...classInfo, major });
   console.log("Searching:", syllabusSearchURL);
 
