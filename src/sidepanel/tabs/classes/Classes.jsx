@@ -6,13 +6,11 @@ function Classes({ classes }) {
   }
 
   return (
-    <div>
-      <h1>あなたの授業</h1>
+    <ul className="flex flex-col gap-5">
       {Object.entries(classes).map(([dayLabel, classItems], i) => (
         <ClassList dayLabel={dayLabel} classItems={classItems} key={i} />
       ))}
-      <ClassList classes={classes} />
-    </div>
+    </ul>
   );
 }
 

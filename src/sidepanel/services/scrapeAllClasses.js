@@ -13,15 +13,14 @@ async function scrapeAllClasses(major) {
   for (const [dayLabel, classInfos] of Object.entries(classInfo.classInfo)) {
     classes[dayLabel] = [];
 
-    for (let classInfo of classInfos) {
+    for (const classInfo of classInfos) {
       try {
         // first attempt
         let syllabusSearchResults = await searchSyllabus({ classInfo, major });
 
         // retry without lecturer if 0 hits
         if (syllabusSearchResults.length === 0) {
-          classInfo = { ...classInfo, lecturer: "" };
-          syllabusSearchResults = await searchSyllabus({ classInfo, major });
+          syllabusSearchResults = await searchSyllabus({ classInfo: { ...classInfo, lecturer: "" }, major });
         }
 
         const syllabusList = syllabusSearchResults.length
