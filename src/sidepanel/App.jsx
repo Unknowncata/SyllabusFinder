@@ -1,6 +1,6 @@
 import "../styles/index.css";
 import { useEffect, useState } from "react";
-import Classes from "./tabs/classes/classes";
+import Classes from "./tabs/classes/classes/Classes";
 import Majors from "./tabs/majors/Majors";
 import Settings from "./tabs/settings/Settings";
 
@@ -18,7 +18,7 @@ function App() {
   }, []);
 
   if (Object.keys(classes).length === 0) {
-    return <Majors />;
+    return <Majors setClasses={setClasses} />;
   }
 
   return (

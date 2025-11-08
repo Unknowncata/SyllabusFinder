@@ -3,16 +3,18 @@ import faculties from "../../../../public/faculties.json";
 import scrapeAllClasses from "../../services/scrapeAllClasses";
 import FacultyElement from "./FacultyElement";
 
-async function submitButton(selectedMajor) {
+async function submitButton(selectedMajor, setClasses) {
   await chrome.storage.local.set({ selectedMajor });
 
   const classes = await scrapeAllClasses(selectedMajor);
   await chrome.storage.local.set({ classes });
 
-  console.log("everything seems good to go");
+  setClasses(classes);
+
+  alert("everything seems good to go");
 }
 
-function Majors() {
+function Majors({ setClasses }) {
   const [selectedMajor, setSelectedMajor] = useState("major", null);
 
   return (
@@ -35,7 +37,9 @@ function Majors() {
           />
         ))}
       </ul>
-      {selectedMajor && <button onClick={() => submitButton(selectedMajor)}>{selectedMajor}に決定する</button>}
+      {selectedMajor && (
+        <button onClick={() => submitButton(selectedMajor, setClasses)}>{selectedMajor}に決定する</button>
+      )}
     </div>
   );
 }
