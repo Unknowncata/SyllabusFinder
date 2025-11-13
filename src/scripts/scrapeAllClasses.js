@@ -1,5 +1,20 @@
 import searchSyllabus from "./searchSyllabus";
 
+function uniqueSyllabusList(syllabusList) {
+  const syllabusIDs = new Set();
+  const uniqueList = [];
+
+  for (const syllabus of syllabusList) {
+    if (syllabusIDs.has(syllabus.syllabusID)) {
+      continue;
+    }
+
+    syllabusIDs.add(syllabus.syllabusID);
+    uniqueList.push(syllabus);
+  }
+  return uniqueList;
+}
+
 async function scrapeAllClasses(major) {
   const classInfo = await chrome.storage.local.get("classInfo");
   if (Object.keys(classInfo.classInfo).length === 0) {
@@ -25,6 +40,7 @@ async function scrapeAllClasses(major) {
 
         const syllabusList = syllabusSearchResults.length
           ? syllabusSearchResults.map((searchResult, index) => {
+              const lectureName = searchResult.querySelector(".col3")?.textContent.trim() || "";
               const subject = searchResult.querySelector(".col7")?.textContent.trim() || "";
               const syllabusID = searchResult.querySelector(".col8 a")?.getAttribute("href") || "";
               const campus =
@@ -35,13 +51,13 @@ async function scrapeAllClasses(major) {
               const grade = searchResult.querySelector(".col9")?.textContent.trim() || "";
               const credits = searchResult.querySelector(".col6")?.textContent.trim() || "";
               const additionalInfo = searchResult.querySelector(".col10")?.textContent.trim() || "";
-              return { subject, syllabusID, campus, grade, credits, additionalInfo };
+              return { lectureName, subject, syllabusID, campus, grade, credits, additionalInfo };
             })
           : [{ syllabusID: null }];
 
         classes[dayLabel].push({
           classInfo,
-          syllabuses: syllabusList,
+          syllabuses: uniqueSyllabusList(syllabusList),
         });
       } catch (err) {
         console.error(err);

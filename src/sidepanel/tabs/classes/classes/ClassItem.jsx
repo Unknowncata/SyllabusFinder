@@ -1,5 +1,6 @@
 import { FaRegUser } from "react-icons/fa6";
 import { LuPencilLine } from "react-icons/lu";
+import InfoField from "../../../components/InfoField";
 
 function handleClick(isCompromised, classData, setSelectedClass) {
   const { syllabusID } = classData.syllabuses[0];
@@ -35,16 +36,8 @@ function ClassItem({ classData, setSelectedClass }) {
         <h3 className="text-lg font-semibold text-gray-800 leading-tight">{lectureName || "講師未定"}</h3>
 
         <div className="mt-1 flex flex-col text-sm text-gray-600 space-x-4">
-          <span className="flex items-center gap-1.5">
-            <FaRegUser />
-            {lecturer}
-          </span>
-          {doesExist && (
-            <span className="flex items-center gap-1.5">
-              <LuPencilLine />
-              {subject || "情報なし"}
-            </span>
-          )}
+          <InfoField Icon={FaRegUser}>{lecturer}</InfoField>
+          {doesExist && <InfoField Icon={LuPencilLine}>{subject}</InfoField>}
         </div>
 
         {doesExist && <ExternalLink isCompromised={isCompromised} syllabusID={syllabusID} />}

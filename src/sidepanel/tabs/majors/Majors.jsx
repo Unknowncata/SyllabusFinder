@@ -1,9 +1,11 @@
 import { useState } from "react";
 import faculties from "../../../../public/faculties.json";
-import scrapeAllClasses from "../../services/scrapeAllClasses";
+import scrapeAllClasses from "../../../scripts/scrapeAllClasses";
 import FacultyElement from "./FacultyElement";
+import Button from "../../components/Button";
 
-async function submitButton(selectedMajor, setClasses) {
+async function submitButton(selectedMajor, setIsLoading, setClasses) {
+  setIsLoading(true);
   await chrome.storage.local.set({ selectedMajor });
 
   const classes = await scrapeAllClasses(selectedMajor);
@@ -11,11 +13,12 @@ async function submitButton(selectedMajor, setClasses) {
 
   setClasses(classes);
 
-  alert("everything seems good to go");
+  alert("シラバスの取得が完了しました！");
+  setIsLoading(false);
 }
 
-function Majors({ setClasses }) {
-  const [selectedMajor, setSelectedMajor] = useState("major", null);
+function Majors({ setIsLoading, setClasses }) {
+  const [selectedMajor, setSelectedMajor] = useState("");
 
   return (
     <div className="h-48 rounded-lg px-5 py-4">
@@ -37,9 +40,9 @@ function Majors({ setClasses }) {
           />
         ))}
       </ul>
-      {selectedMajor && (
-        <button onClick={() => submitButton(selectedMajor, setClasses)}>{selectedMajor}に決定する</button>
-      )}
+      <Button handleClick={() => submitButton(selectedMajor, setIsLoading, setClasses)} isDisabled={!selectedMajor}>
+        {selectedMajor}に決定する
+      </Button>
     </div>
   );
 }

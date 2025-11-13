@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ClassList from "./ClassList.jsx";
 import CollectedSyllabuses from "../collectedSyllabuses/CollectedSyllabuses.jsx";
+import Button from "../../../components/Button.jsx";
 
 function Classes({ classes }) {
   const [selectedClass, setSelectedClass] = useState({});

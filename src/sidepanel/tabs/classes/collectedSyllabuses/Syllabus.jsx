@@ -1,20 +1,21 @@
 import { FaRegCreditCard, FaPencil } from "react-icons/fa6";
 import { FaChalkboardTeacher, FaSchool, FaRegCommentDots, FaUserCheck } from "react-icons/fa";
 import { useState } from "react";
+import InfoField from "../../../components/InfoField";
 
-function Syllabus({ syllabus, selectedSyllabusID, setSelectedSyllabusID }) {
+function Syllabus({ index, syllabus, selectedSyllabusIndex, setSelectedSyllabusIndex }) {
   const { day, lectureName, lecturer, period, isOnline } = syllabus.classInfo;
   const { additionalInfo, campus, credits, grade, syllabusID, subject } = syllabus.syllabus;
 
   const [isHovered, setIsHovered] = useState(false);
-  const isSelected = syllabusID === selectedSyllabusID;
+  const isSelected = index === selectedSyllabusIndex;
 
   return (
     <div
-      className={`relative flex items-center gap-3 rounded-2xl py-3.5 px-1.5 shadow-sm h-44 hover:cursor-pointer outline-blue-600 transition-all duration-300 ${
+      className={`relative flex items-center gap-3 rounded-2xl py-3.5 px-1.5 shadow-sm h-44 hover:cursor-pointer outline-blue-600 transition-all duration-150 ${
         !isHovered && "hover:outline-3"
       } ${isSelected && "outline-3"}`}
-      onClick={() => setSelectedSyllabusID(syllabusID)}
+      onClick={() => setSelectedSyllabusIndex(index)}
     >
       <div className="flex flex-col items-center text-base w-12 flex-shrink-0 text-gray-500">
         <p>{isOnline ? "*" : period}</p>
@@ -25,30 +26,12 @@ function Syllabus({ syllabus, selectedSyllabusID, setSelectedSyllabusID }) {
         <h3 className="text-lg font-semibold text-gray-800 leading-tight pb-2.5">{lectureName || "講師未定"}</h3>
 
         <div className="mt-1 grid grid-cols-2 gap-1 text-sm text-gray-600 space-x-4">
-          <span className="flex items-center gap-2">
-            <FaChalkboardTeacher />
-            {lecturer || "情報なし"}
-          </span>
-          <span className="flex items-center gap-2">
-            <FaPencil />
-            {subject || "情報なし"}
-          </span>
-          <span className="flex items-center gap-2">
-            <FaUserCheck />
-            {grade || "情報なし"}
-          </span>
-          <span className="flex items-center gap-2">
-            <FaRegCreditCard />
-            {credits ? `${credits}単位` : "情報なし"}
-          </span>
-          <span className="flex items-center gap-2">
-            <FaSchool />
-            {campus || "情報なし"}
-          </span>
-          <span className="flex items-center gap-2">
-            <FaRegCommentDots />
-            {additionalInfo.slice(1, -1) || "情報なし"}
-          </span>
+          <InfoField Icon={FaChalkboardTeacher}>{lecturer}</InfoField>
+          <InfoField Icon={FaPencil}>{subject}</InfoField>
+          <InfoField Icon={FaUserCheck}>{grade}</InfoField>
+          <InfoField Icon={FaRegCreditCard}>{credits ? `${credits}単位` : "情報なし"}</InfoField>
+          <InfoField Icon={FaSchool}>{campus}</InfoField>
+          <InfoField Icon={FaRegCommentDots}>{additionalInfo && additionalInfo.slice(1, -1)}</InfoField>
         </div>
 
         <a
