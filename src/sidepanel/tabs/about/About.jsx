@@ -10,8 +10,8 @@ function About() {
             </p>
             <p className="mb-2">
                 Github:
-                <a href="https://github.com/Unknowncata/SyllabusFinder/" className="text-blue-500 underline">
-                    https://github.com/Unknowncata/SyllabusFinder/
+                <a href="https://github.com/iamrenda/SyllabusFinder" className="text-blue-500 underline">
+                    https://github.com/iamrenda/SyllabusFinder
                 </a>
             </p>
             <p className="mb-2">開発者：青山学院大学 情報テクノロジー学科 １年 渡部 廉</p>
