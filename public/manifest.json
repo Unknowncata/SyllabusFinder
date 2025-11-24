@@ -1,20 +1,20 @@
 {
     "manifest_version": 3,
-    "name": "Syllabus Finder",
+    "name": "青山学院大学シラバス検索拡張機能",
     "version": "1.0",
-    "description": "Syllabus finder for Aoyama Gakuin Students",
+    "description": "青山学院大学学生向けシラバス検索拡張機能です。",
     "permissions": ["storage", "scripting", "activeTab", "sidePanel", "tabs"],
     "background": {
         "service_worker": "background.js"
     },
     "action": {
-        "default_title": "Click to open panel",
+        "default_title": "パネルを開くにはクリックしてください",
         "default_icon": {
-            "128": "./icon.png"
+            "128": "icon.png"
         }
     },
     "icons": {
-        "128": "./icon.png"
+        "128": "icon.png"
     },
     "side_panel": {
         "default_path": "src/sidepanel/index.html"
