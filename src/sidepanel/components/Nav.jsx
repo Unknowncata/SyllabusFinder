@@ -3,6 +3,7 @@ import NavItem from "./NavItem";
 const tabs = [
     { id: "classes", label: "クラス" },
     { id: "about", label: "拡張機能について" },
+    { id: "settings", label: "設定" },
 ];
 
 function Nav({ activeTab, setActiveTab }) {

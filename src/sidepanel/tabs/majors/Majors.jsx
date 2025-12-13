@@ -4,7 +4,6 @@ import FacultyElement from "./FacultyElement";
 import Button from "../../components/Button";
 import storeClasses from "../../../scripts/storeClasses";
 import requestScrapeFromPage from "../../../scripts/requestScrapeFromPage";
-import Syllabus from "../classes/collectedSyllabuses/Syllabus";
 import { SyllabusFinderContext } from "../../Context/SyllabusFinderContext";
 
 async function storeMajor(tempMajor) {

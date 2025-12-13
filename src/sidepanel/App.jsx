@@ -9,6 +9,7 @@ import storeClasses from "../scripts/storeClasses";
 import Error from "./components/Error";
 import requestScrapeFromPage from "../scripts/requestScrapeFromPage";
 import { SyllabusFinderContext } from "./Context/SyllabusFinderContext";
+import Settings from "./tabs/settings/Settings";
 
 async function reload(selectedMajor, setClasses, setIsLoading) {
     setIsLoading(true);
@@ -85,6 +86,7 @@ function App() {
             <div className="flex-1 overflow-y-auto p-3">
                 {activeTab === "classes" && <Classes classes={classes} />}
                 {activeTab === "about" && <About />}
+                {activeTab === "settings" && <Settings />}
             </div>
         </div>
     );
