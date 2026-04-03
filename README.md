@@ -2,6 +2,9 @@
 
 シラバスファインダーは、青山学院大学学生のためだけに作られた Chrome 拡張機能です。ぜひご活用ください。
 
+## 使い方
+https://github.com/user-attachments/assets/77e54047-ba31-47e9-ac2e-bbce58888bca
+
 ## 搭載機能
 
 -   シラバスをすぐに探して、簡単にアクセス
